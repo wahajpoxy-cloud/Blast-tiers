@@ -39,7 +39,7 @@ h1{font-size:46px;margin:8px 0}.blue{color:#178eff}.muted{color:#7890a7}.hero p{
 <button class="active" onclick="page('home',this)">Home</button>
 <button onclick="page('rankings',this)">Rankings</button>
 <button onclick="page('chat',this)">Open Chat</button>
-<button onclick="page('players',this)">Players</button>
+<button onclick="page('players',this)">Players</button><button onclick="page('addplayer',this)">+ Add Player</button>
 <button onclick="page('chat',this)">Chat</button>
 <button onclick="page('addkit',this)">+ Add Kit</button>
 <button onclick="page('addtier',this)">+ Add Tier</button>
@@ -51,12 +51,8 @@ h1{font-size:46px;margin:8px 0}.blue{color:#178eff}.muted{color:#7890a7}.hero p{
 const kits=[
 ["LTMs","⚔️"],["Vanilla","⬡"],["UHC","♥"],["Pot","🧪"],["NethOP","♟"],["SMP","◉"],["Sword","🗡"],["Axe","⚒"],["Mace","⚒"]
 ];
-const players=[
-{name:"Marlowww",region:"NA",title:"Combat Grandmaster",score:450,skin:"https://mc-heads.net/body/Marlowww/100.png",t:["HT1","HT1","HT1","HT1","HT1","HT1","HT1","LT1"]},
-{name:"ItzRealMe",region:"NA",title:"Combat Master",score:330,skin:"https://mc-heads.net/body/ItzRealMe/100.png",t:["HT3","HT1","HT1","HT1","HT1","LT2","LT2","LT2"]},
-{name:"coldified",region:"EU",title:"Combat Master",score:326,skin:"https://mc-heads.net/body/coldified/100.png",t:["LT1","LT3","HT1","HT1","LT1","LT1","LT1","LT2"]},
-{name:"Swight",region:"NA",title:"Combat Master",score:290,skin:"https://mc-heads.net/body/Swight/100.png",t:["LT3","HT1","HT1","HT2","LT2","LT2","LT2","LT2"]}
-];
+const players=[];
+try{const saved=JSON.parse(localStorage.btplayers||"null");if(Array.isArray(saved))players.push(...saved)}catch(e){}\ntry{const saved=JSON.parse(localStorage.btplayers||"[]");if(Array.isArray(saved))players.push(...saved)}catch(e){}
 function esc(x){return String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function ranking(){
 return `<div class="panel"><div class="tabs"><button class="tab active" onclick="filterKit('Overall',this)"><b>🏆</b>Overall</button>${kits.map(k=>`<button class="tab" onclick="filterKit('${k[0]}',this)"><b>${k[1]}</b>${k[0]}</button>`).join("")}</div><div class="info"><button>ⓘ Information</button></div><div class="head"><span>#</span><span>PLAYER</span><span>REGION</span><span>TIERS</span></div><div id="rows">${rows()}</div></div>`;
@@ -67,7 +63,7 @@ return players.map((p,i)=>`<div class="row"><div class="rankskin ${i==0?'gold':i
 function home(){return `<section class="hero"><div><small class="blue">MINECRAFT COMPETITIVE RANKINGS</small><h1>Welcome to <span class="blue">BlastTier</span></h1><p>A clean community tier-list website for Minecraft competitive players. View rankings, kits, skins and tiers in one place.</p><button class="btn primary" onclick="page('rankings')">View Rankings</button><button class="btn" onclick="page('chat')">Open Chat</button></div><div class="hero-logo">⚡ <span>BLAST</span>TIER</div></section><section class="cards"><div class="card"><b>🏆</b><h3>Rankings</h3><p>Screenshot-style player rankings with skins, regions and kit tiers.</p></div><div class="card"><b>⚔️</b><h3>All Kits</h3><p>LTMs, Vanilla, UHC, Pot, NethOP, SMP, Sword, Axe and Mace.</p></div><div class="card"><b>👤</b><h3>Players</h3><p>Browse player skins and their competitive results.</p></div><div class="card"><b>💬</b><h3>Community Chat</h3><p>Chat directly on the website without a backend.</p></div></section>`}
 function page(p,btn){
 document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");
-let out=p==="home"?home():p==="rankings"?ranking():p==="players"?playersPage():p==="chat"?chatPage():p==="addkit"?addKit():addTier();
+let out=p==="home"?home():p==="rankings"?ranking():p==="players"?playersPage():p==="chat"?chatPage():p==="addkit"?addKit():p==="addplayer"?addPlayer():addTier();
 document.getElementById("app").innerHTML=out; if(p==="chat")loadChat();if(p==="addtier")fillTierKits();
 }
 function playersPage(){return `<div class="pageTitle"><h1>Players</h1><p class="muted">Minecraft skins, regions and BlastTier results.</p></div><div class="playerGrid">${players.map(p=>`<div class="player"><img src="${p.skin}"><div><h3>${p.name}</h3><p class="muted">${p.region} • ${p.title} • ${p.score} points</p></div></div>`).join("")}</div>`}
@@ -75,6 +71,8 @@ function filterKit(name,el){document.querySelectorAll(".tab").forEach(x=>x.class
 function chatPage(){return `<div class="chat"><div style="padding:20px;border-bottom:1px solid #1c2d3e"><h2 style="margin:0">BlastTier Chat</h2><span class="muted">Community room</span></div><div class="messages" id="messages"></div><form onsubmit="sendMsg(event)"><input id="chatInput" placeholder="Write a message..." autocomplete="off"><button>Send</button></form></div>`}
 function loadChat(){let a=JSON.parse(localStorage.btchat||"[]");document.getElementById("messages").innerHTML=(a.length?a:[{n:"BlastTier",t:"Welcome to the BlastTier community chat!"}]).map(m=>`<div class="msg"><b>${esc(m.n)}</b><div>${esc(m.t)}</div></div>`).join("")}
 function sendMsg(e){e.preventDefault();let i=document.getElementById("chatInput"),v=i.value.trim();if(!v)return;let a=JSON.parse(localStorage.btchat||"[]");a.push({n:"You",t:v});localStorage.btchat=JSON.stringify(a);i.value="";loadChat()}
+function addPlayer(){return `<div class="form"><h1>Add Player</h1><p class="muted">Add a player to BlastTier. Nothing is pre-added.</p><label>Player name<input id="playerName" placeholder="PlayerName" required></label><label>Skin URL<input id="playerSkin" placeholder="https://mc-heads.net/body/PlayerName/100.png"></label><label>Region<select id="playerRegion"><option>NA</option><option>EU</option><option>AS</option><option>OC</option></select></label><label>Title<input id="playerTitle" placeholder="Combat Master"></label><label>Points<input id="playerScore" type="number" value="0"></label><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">${kits.slice(0,8).map((k,i)=>`<label>${k[0]}<input id="tier${i}" placeholder="HT1"></label>`).join("")}</div><button class="btn primary" onclick="savePlayer()">Add Player</button><p id="msg" class="muted"></p></div>`}
+function savePlayer(){let n=document.getElementById("playerName").value.trim();if(!n)return;let skin=document.getElementById("playerSkin").value.trim()||`https://mc-heads.net/body/${encodeURIComponent(n)}/100.png`;let p={name:n,region:document.getElementById("playerRegion").value,title:document.getElementById("playerTitle").value.trim()||"Player",score:Number(document.getElementById("playerScore").value)||0,skin,t:kits.slice(0,8).map((_,i)=>document.getElementById("tier"+i).value.trim()||"—")};players.push(p);localStorage.btplayers=JSON.stringify(players);document.getElementById("msg").textContent=n+" added successfully.";setTimeout(()=>page("rankings"),500)}
 function addKit(){return `<div class="form"><h1>Add Kit</h1><p class="muted">Add a new kit to your BlastTier website.</p><label>Kit name<input id="newKit" placeholder="Crystal"></label><label>Kit icon<input id="newIcon" placeholder="⚔️"></label><button class="btn primary" onclick="saveKit()">Add Kit</button><p id="msg" class="muted"></p></div>`}
 function saveKit(){let n=document.getElementById("newKit").value.trim(),i=document.getElementById("newIcon").value.trim()||"◈";if(!n)return;kits.push([n,i]);document.getElementById("msg").textContent="Kit added successfully.";document.getElementById("newKit").value=""}
 function addTier(){return `<div class="form"><h1>Add Tier</h1><p class="muted">Create a tier label for any BlastTier kit.</p><label>Kit<select id="tierKit"></select></label><label>Tier name<input id="tierName" placeholder="HT1"></label><button class="btn primary" onclick="saveTier()">Add Tier</button><p id="msg" class="muted"></p></div>`}
