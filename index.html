@@ -52,8 +52,7 @@ const kits=[
 ["LTMs","⚔️"],["Vanilla","⬡"],["UHC","♥"],["Pot","🧪"],["NethOP","♟"],["SMP","◉"],["Sword","🗡"],["Axe","⚒"],["Mace","⚒"]
 ];
 const players=[];
-try{const saved=JSON.parse(localStorage.btplayers||"null");if(Array.isArray(saved))players.push(...saved)}catch(e){}\ntry{const saved=JSON.parse(localStorage.btplayers||"[]");if(Array.isArray(saved))players.push(...saved)}catch(e){}
-function esc(x){return String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+try{const saved=JSON.parse(localStorage.btplayers||"null");if(Array.isArray(saved))players.push(...saved)}catch(e){}\nfunction esc(x){return String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function ranking(){
 return `<div class="panel"><div class="tabs"><button class="tab active" onclick="filterKit('Overall',this)"><b>🏆</b>Overall</button>${kits.map(k=>`<button class="tab" onclick="filterKit('${k[0]}',this)"><b>${k[1]}</b>${k[0]}</button>`).join("")}</div><div class="info"><button>ⓘ Information</button></div><div class="head"><span>#</span><span>PLAYER</span><span>REGION</span><span>TIERS</span></div><div id="rows">${rows()}</div></div>`;
 }
