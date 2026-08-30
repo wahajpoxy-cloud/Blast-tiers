@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BlastTier</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#080f17;color:#e7f0fa;font-family:Inter,Segoe UI,Arial,sans-serif}
+header{height:70px;background:#0d1722;border-bottom:1px solid #1c2b3a;display:flex;align-items:center;padding:0 28px;gap:28px;position:sticky;top:0;z-index:10}
+.logo{font-size:27px;font-weight:1000;letter-spacing:-1px;min-width:220px}.logo b{color:#1690ff}
+.logo i{display:inline-grid;place-items:center;width:38px;height:38px;margin-right:8px;border-radius:9px;background:linear-gradient(145deg,#168fff,#0756a9);font-style:normal;color:white}
+nav{display:flex;gap:5px;flex:1;overflow:auto}nav button{border:0;background:transparent;color:#7890a7;padding:12px 15px;border-radius:9px;font-weight:800;white-space:nowrap;cursor:pointer}nav button:hover,nav button.active{background:#123250;color:white}
+.search{width:210px;background:#09121b;border:1px solid #223548;border-radius:10px;padding:11px;color:#fff;outline:0}
+main{max-width:1360px;margin:48px auto;padding:0 18px}
+.hero{border:1px solid #1c2d3e;border-radius:18px;background:radial-gradient(circle at 85% 20%,#075aa833,transparent 35%),#0d1823;padding:55px;display:flex;justify-content:space-between;align-items:center}
+h1{font-size:46px;margin:8px 0}.blue{color:#178eff}.muted{color:#7890a7}.hero p{max-width:650px;line-height:1.7;font-size:16px}.btn{display:inline-block;border:1px solid #24415b;background:#122132;color:#fff;border-radius:9px;padding:12px 18px;margin:8px 6px 0 0;font-weight:850;cursor:pointer}.primary{background:#1689f5;border-color:#1689f5}
+.hero-logo{width:280px;height:180px;border:1px solid #25445e;border-radius:16px;background:#09131e;display:grid;place-items:center;font-size:38px;font-weight:1000}.hero-logo span{color:#178eff}
+.panel{border:1px solid #1b2c3d;background:#0c1722;border-radius:15px;overflow:hidden}
+.tabs{display:flex;overflow:auto;border-bottom:1px solid #1b2c3d}.tab{min-width:105px;height:65px;background:#0c1722;border:0;border-right:1px solid #182838;color:#667b8e;font-weight:850;cursor:pointer}.tab b{display:block;font-size:22px}.tab.active{color:white;border-bottom:2px solid white}
+.info{display:flex;justify-content:flex-end;padding:15px;border-bottom:1px solid #1b2c3d}.info button{background:#18283a;color:#e8f2fc;border:0;border-radius:8px;padding:10px 14px;font-weight:800}
+.head{display:grid;grid-template-columns:145px 1fr 75px 430px;padding:0 38px;height:48px;align-items:center;color:#26394b;font-size:12px;font-weight:900}
+.row{height:80px;margin:0 18px 8px;display:grid;grid-template-columns:145px 1fr 75px 430px;align-items:center;background:#101c27;border:1px solid #1c2d3e;border-radius:12px;overflow:hidden}
+.rankskin{height:80px;display:flex;align-items:center;position:relative;background:#182737}.rankskin.gold{background:#f0bf38}.rankskin.silver{background:#9aaeb5}.rankskin.bronze{background:#a96324}.rank{font-size:29px;font-weight:950;font-style:italic;width:58px;text-align:center;z-index:2;color:#fff;text-shadow:1px 2px #0008}.skin{height:91px;width:80px;object-fit:contain;align-self:flex-end;margin-bottom:-7px}
+.name{font-size:20px;font-weight:900}.sub{display:block;color:#7890a7;font-size:13px;margin-top:5px}.region{text-align:center;font-weight:950;padding:13px 7px;border-radius:8px;width:52px}.NA{background:#381f29;color:#ff6373}.EU{background:#173221;color:#5cf27a}.AS{background:#173653;color:#65b9ff}
+.tiers{height:100%;display:flex;align-items:center;gap:5px;background:#0d161f;padding:0 7px}.tier{text-align:center;width:40px}.kit{width:29px;height:29px;border-radius:50%;background:#080d13;border:2px solid #2a3a4c;display:grid;place-items:center;margin:auto;font-size:15px}.tier strong{font-size:10px;color:#ffc82d;display:block;margin-top:2px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:18px}.card{padding:24px;border:1px solid #1b2c3d;border-radius:13px;background:#0d1823}.card b{font-size:28px}.card h3{margin:13px 0 5px}.card p{color:#7890a7;margin:0;line-height:1.5}
+.pageTitle{margin-bottom:20px}.playerGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.player{display:flex;align-items:center;gap:18px;padding:15px;border:1px solid #1c2d3e;border-radius:13px;background:#0d1823}.player img{height:115px;width:90px;object-fit:contain}.player h3{margin:0}.kitGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.kitCard{padding:25px;border:1px solid #1c2d3e;border-radius:13px;background:#0d1823}.kitIcon{font-size:40px}
+.form{max-width:600px;margin:auto;padding:28px;border:1px solid #1c2d3e;border-radius:15px;background:#0d1823}.form input,.form select{width:100%;margin:8px 0 18px;padding:13px;background:#09121b;border:1px solid #263a4d;border-radius:8px;color:white}.form label{color:#a8b9ca;font-weight:800}
+.chat{max-width:850px;margin:auto;border:1px solid #1c2d3e;border-radius:15px;overflow:hidden;background:#0d1823}.messages{height:430px;overflow:auto;padding:20px}.msg{background:#142333;border-radius:9px;padding:11px 14px;margin:9px 0;max-width:75%}.msg b{color:#63b7ff}.chat form{display:flex;gap:8px;padding:14px;border-top:1px solid #1c2d3e}.chat input{flex:1;padding:13px;background:#09121b;border:1px solid #263a4d;color:white;border-radius:8px}.chat form button{background:#1689f5;color:white;border:0;border-radius:8px;padding:0 20px;font-weight:900}
+.empty{text-align:center;padding:70px;color:#7890a7}
+@media(max-width:900px){header{padding:0 12px;gap:10px}.logo{min-width:150px}nav button{padding:10px 8px}.search{display:none}.hero{display:block;padding:30px}.hero-logo{margin-top:25px;width:100%}.cards{grid-template-columns:repeat(2,1fr)}.kitGrid{grid-template-columns:repeat(2,1fr)}.head{grid-template-columns:100px 1fr 55px 300px}.row{grid-template-columns:100px 1fr 55px 300px}}
+@media(max-width:650px){h1{font-size:35px}.cards,.playerGrid,.kitGrid{grid-template-columns:1fr}.head{display:none}.row{grid-template-columns:105px 1fr;height:80px}.row .region,.row .tiers{display:none}.skin{width:70px}.hero{padding:25px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo"><i>⚡</i>Blast<span class="blue">Tier</span></div>
+<nav>
+<button class="active" onclick="page('home',this)">Home</button>
+<button onclick="page('rankings',this)">Rankings</button>
+<button onclick="page('chat',this)">Open Chat</button>
+<button onclick="page('players',this)">Players</button>
+<button onclick="page('chat',this)">Chat</button>
+<button onclick="page('addkit',this)">+ Add Kit</button>
+<button onclick="page('addtier',this)">+ Add Tier</button>
+</nav>
+<input class="search" id="search" placeholder="Search player...">
+</header>
+<main id="app"></main>
+<script>
+const kits=[
+["LTMs","⚔️"],["Vanilla","⬡"],["UHC","♥"],["Pot","🧪"],["NethOP","♟"],["SMP","◉"],["Sword","🗡"],["Axe","⚒"],["Mace","⚒"]
+];
+const players=[
+{name:"Marlowww",region:"NA",title:"Combat Grandmaster",score:450,skin:"https://mc-heads.net/body/Marlowww/100.png",t:["HT1","HT1","HT1","HT1","HT1","HT1","HT1","LT1"]},
+{name:"ItzRealMe",region:"NA",title:"Combat Master",score:330,skin:"https://mc-heads.net/body/ItzRealMe/100.png",t:["HT3","HT1","HT1","HT1","HT1","LT2","LT2","LT2"]},
+{name:"coldified",region:"EU",title:"Combat Master",score:326,skin:"https://mc-heads.net/body/coldified/100.png",t:["LT1","LT3","HT1","HT1","LT1","LT1","LT1","LT2"]},
+{name:"Swight",region:"NA",title:"Combat Master",score:290,skin:"https://mc-heads.net/body/Swight/100.png",t:["LT3","HT1","HT1","HT2","LT2","LT2","LT2","LT2"]}
+];
+function esc(x){return String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function ranking(){
+return `<div class="panel"><div class="tabs"><button class="tab active" onclick="filterKit('Overall',this)"><b>🏆</b>Overall</button>${kits.map(k=>`<button class="tab" onclick="filterKit('${k[0]}',this)"><b>${k[1]}</b>${k[0]}</button>`).join("")}</div><div class="info"><button>ⓘ Information</button></div><div class="head"><span>#</span><span>PLAYER</span><span>REGION</span><span>TIERS</span></div><div id="rows">${rows()}</div></div>`;
+}
+function rows(){
+return players.map((p,i)=>`<div class="row"><div class="rankskin ${i==0?'gold':i==1?'silver':i==2?'bronze':''}"><div class="rank">${i+1}.</div><img class="skin" src="${p.skin}" onerror="this.style.display='none'"></div><div><div class="name">${esc(p.name)}</div><span class="sub">◆ ${esc(p.title)} (${p.score} points)</span></div><div><span class="region ${p.region}">${p.region}</span></div><div class="tiers">${kits.slice(0,8).map((k,j)=>`<div class="tier"><div class="kit">${k[1]}</div><strong>${p.t[j]||"—"}</strong></div>`).join("")}</div></div>`).join("");
+}
+function home(){return `<section class="hero"><div><small class="blue">MINECRAFT COMPETITIVE RANKINGS</small><h1>Welcome to <span class="blue">BlastTier</span></h1><p>A clean community tier-list website for Minecraft competitive players. View rankings, kits, skins and tiers in one place.</p><button class="btn primary" onclick="page('rankings')">View Rankings</button><button class="btn" onclick="page('chat')">Open Chat</button></div><div class="hero-logo">⚡ <span>BLAST</span>TIER</div></section><section class="cards"><div class="card"><b>🏆</b><h3>Rankings</h3><p>Screenshot-style player rankings with skins, regions and kit tiers.</p></div><div class="card"><b>⚔️</b><h3>All Kits</h3><p>LTMs, Vanilla, UHC, Pot, NethOP, SMP, Sword, Axe and Mace.</p></div><div class="card"><b>👤</b><h3>Players</h3><p>Browse player skins and their competitive results.</p></div><div class="card"><b>💬</b><h3>Community Chat</h3><p>Chat directly on the website without a backend.</p></div></section>`}
+function page(p,btn){
+document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");
+let out=p==="home"?home():p==="rankings"?ranking():p==="players"?playersPage():p==="chat"?chatPage():p==="addkit"?addKit():addTier();
+document.getElementById("app").innerHTML=out; if(p==="chat")loadChat();if(p==="addtier")fillTierKits();
+}
+function playersPage(){return `<div class="pageTitle"><h1>Players</h1><p class="muted">Minecraft skins, regions and BlastTier results.</p></div><div class="playerGrid">${players.map(p=>`<div class="player"><img src="${p.skin}"><div><h3>${p.name}</h3><p class="muted">${p.region} • ${p.title} • ${p.score} points</p></div></div>`).join("")}</div>`}
+function filterKit(name,el){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));el.classList.add("active");document.getElementById("rows").innerHTML=rows();}
+function chatPage(){return `<div class="chat"><div style="padding:20px;border-bottom:1px solid #1c2d3e"><h2 style="margin:0">BlastTier Chat</h2><span class="muted">Community room</span></div><div class="messages" id="messages"></div><form onsubmit="sendMsg(event)"><input id="chatInput" placeholder="Write a message..." autocomplete="off"><button>Send</button></form></div>`}
+function loadChat(){let a=JSON.parse(localStorage.btchat||"[]");document.getElementById("messages").innerHTML=(a.length?a:[{n:"BlastTier",t:"Welcome to the BlastTier community chat!"}]).map(m=>`<div class="msg"><b>${esc(m.n)}</b><div>${esc(m.t)}</div></div>`).join("")}
+function sendMsg(e){e.preventDefault();let i=document.getElementById("chatInput"),v=i.value.trim();if(!v)return;let a=JSON.parse(localStorage.btchat||"[]");a.push({n:"You",t:v});localStorage.btchat=JSON.stringify(a);i.value="";loadChat()}
+function addKit(){return `<div class="form"><h1>Add Kit</h1><p class="muted">Add a new kit to your BlastTier website.</p><label>Kit name<input id="newKit" placeholder="Crystal"></label><label>Kit icon<input id="newIcon" placeholder="⚔️"></label><button class="btn primary" onclick="saveKit()">Add Kit</button><p id="msg" class="muted"></p></div>`}
+function saveKit(){let n=document.getElementById("newKit").value.trim(),i=document.getElementById("newIcon").value.trim()||"◈";if(!n)return;kits.push([n,i]);document.getElementById("msg").textContent="Kit added successfully.";document.getElementById("newKit").value=""}
+function addTier(){return `<div class="form"><h1>Add Tier</h1><p class="muted">Create a tier label for any BlastTier kit.</p><label>Kit<select id="tierKit"></select></label><label>Tier name<input id="tierName" placeholder="HT1"></label><button class="btn primary" onclick="saveTier()">Add Tier</button><p id="msg" class="muted"></p></div>`}
+function fillTierKits(){document.getElementById("tierKit").innerHTML=kits.map(k=>`<option>${k[0]}</option>`).join("")}
+function saveTier(){let k=document.getElementById("tierKit").value,t=document.getElementById("tierName").value.trim();if(!t)return;document.getElementById("msg").textContent=t+" added to "+k+".";document.getElementById("tierName").value=""}
+document.getElementById("search").addEventListener("input",e=>{let q=e.target.value.toLowerCase();if(!document.getElementById("rows"))return;document.getElementById("rows").innerHTML=players.filter(p=>p.name.toLowerCase().includes(q)).map((p,i)=>`<div class="row"><div class="rankskin"><div class="rank">${i+1}.</div><img class="skin" src="${p.skin}"></div><div><div class="name">${esc(p.name)}</div><span class="sub">◆ ${esc(p.title)} (${p.score} points)</span></div><div><span class="region ${p.region}">${p.region}</span></div><div class="tiers">${kits.slice(0,8).map((k,j)=>`<div class="tier"><div class="kit">${k[1]}</div><strong>${p.t[j]||"—"}</strong></div>`).join("")}</div></div>`).join("")||'<div class="empty">No player found.</div>'});
+page("home");
+</script>
+</body>
+</html>
